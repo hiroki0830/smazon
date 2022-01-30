@@ -1,3 +1,13 @@
+.samazon-favorite-button {
+    border-radius: 2px;
+    border: solid 1px #0fbe9f;
+    background-color: #ffffff;
+}
+
+.text-favorite{
+    color: #0fbe9f;
+}
+
 .samazon-header-container {
     box-shadow:0 1px 1px 0 raba(0, 0, 0, 0.1);
     background-color: #ffffff;
