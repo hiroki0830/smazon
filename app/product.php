@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
  use Overtrue\LaravelFavorite\Traits\Favoriteable;
 
-class product extends Model
+class Product extends Model
 {
     use Favoriteable;
 
