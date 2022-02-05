@@ -25,5 +25,6 @@ class ReviewController extends Controller
         $review->save();
 
         return redirect()->route('products.show',$product);
+       //compact関数は、配列をcontrollerからviewに渡すことができる
     }
 }

@@ -14,15 +14,32 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request) //この変数に$category->idの値が入る。なせ？？
     {
-        $products = Product::paginate(15);
+        if ($request->category !== null){
+            //カテゴリーIDが無い場合？
+            $products = Product::where('category_id', $request->category)->paginate(15);
+            // $products
+            $total_count = Product::where('category_id', $request->category)->count();
+            $category = Category::find($request->category);
+            //$categoryはCategoryモデル？から、$requestで取得したカテゴリーIDを、categoryから返してくる
+        } else {
+            $products = Product::paginate(15);
+            $total_count= "";
+             $category = null;
+        }
 
-        return view('products.index', compact('products'));
+        $categories = Category::all();
+        $major_category_names = Category::pluck('major_category_name')->unique();
+        //大項目のカテゴリーだけ、連想配列から、取ってきて＝$majpr_category_names
+        //それを、重複した値を取り除いて出力して　unique関数
+
+        return view('products.index', compact('products','category','categories','major_category_names', 'total_count'));
     }
     //変数$productは、Productのデータベースにある情報を15分割で表示
     //products.indexディレクトリに、compact関数を使って、変数productsを渡す
     //だから、indexページに、ページネイションが実装される
+    //compact関数で、変数categoriesも表示
 
     public function favorite(Product $product)
     {
