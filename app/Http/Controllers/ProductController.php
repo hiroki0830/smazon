@@ -14,12 +14,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $products = Product::all();
+        $product = Product::pagenate(15);
 
         return view('products.index', compact('products'));
     }
+    //変数$productは、Productのデータベースにある情報を15分割で表示
+    //products.indexディレクトリに、compact関数を使って、変数productsを渡す
+    //だから、indexページに、ページネイションが実装される
 
     public function favorite(Product $product)
     {
