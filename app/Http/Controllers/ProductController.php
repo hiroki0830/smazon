@@ -16,25 +16,56 @@ class ProductController extends Controller
      */
     public function index(Request $request) //この変数に$category->idの値が入る。なせ？？
     {
+        $sort_query = [];
+        //$sort_queyは空の配列
+        $sorted = "";
+        //$sortedも空の変数
+         
+         if($request->direction !== null) {
+             $sort_query = $request->direction;
+             $sorted = $request->sort;
+             //$request（受け取る値？）でdirectionが何か不明・・？でnullじゃない時
+             //空の配列$sort_queryに、$requestを入れる
+             //空の変数$sortedに、sort（$request）を代入
+         } else if ($request->sort !== null){
+             $slices = explode('', $request->sort);
+             $sort_query[$slices[0]] = $slices[1];
+             $sorted =$request->sort;
+             //$request（受け取ったデータ）がsortで、空じゃ無い時は、
+             //$slicesは、explode関数で、''を区切り値として、文字列を、配列のデータとして並べて
+             //$sort_queryは配列データの0番目を、1番目として処理？
+             //$sortedは$requestできたデータをsortする
+         }
+
         if ($request->category !== null){
-            //カテゴリーIDが無い場合？
-            $products = Product::where('category_id', $request->category)->paginate(15);
-            // $products
+            //ユーザーからリクエストがきて、
+            $products = Product::where('category_id', $request->category)->sortable($sort_query)->paginate(15);
+            // $productsは、DBのProductのカテゴリーIDカラムの、リクエストでもらったカテゴリーと一致している情報をとってくる、かつソートとして出力する&ページネイション
             $total_count = Product::where('category_id', $request->category)->count();
+            // $total_countは、DBのProductのカテゴリーID絡むの、リクエストでもらったカテゴリーの総数を出力する
             $category = Category::find($request->category);
-            //$categoryはCategoryモデル？から、$requestで取得したカテゴリーIDを、categoryから返してくる
+            //$categoryはDBのCategoryから、$requestで取得したカテゴリーIDを、CategoryのDBから返してくる
         } else {
-            $products = Product::paginate(15);
+            $products = Product::sortable($sort_query)->paginate(15);
+            //$productsは、DBのProductの
             $total_count= "";
              $category = null;
         }
+
+        $sort = [
+            '並び替え' => '',
+            '価格の安い順' => 'price asc',
+            '価格の高い順' => 'price desc',
+            '出品の古い順' => 'updated_at asc',
+            '出品の新しい順' => 'updated_at desc'
+        ];
 
         $categories = Category::all();
         $major_category_names = Category::pluck('major_category_name')->unique();
         //大項目のカテゴリーだけ、連想配列から、取ってきて＝$majpr_category_names
         //それを、重複した値を取り除いて出力して　unique関数
 
-        return view('products.index', compact('products','category','categories','major_category_names', 'total_count'));
+        return view('products.index', compact('products','category','categories','major_category_names', 'total_count', 'sort', 'sorted'));
     }
     //変数$productは、Productのデータベースにある情報を15分割で表示
     //products.indexディレクトリに、compact関数を使って、変数productsを渡す
