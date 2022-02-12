@@ -28,8 +28,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'postal_code', 'address', 'phone'
     ];
+    //$fillableはモデルを通じて、設定可能なカラムのリスト
+    //モデルを通じて、読み込ませることはできても、編集はできない
+    //$fillableに追加すると、ユーザーで編集可能かつ、保存が可能になる！
+    //クラス変数とは？Laravelにおける仕様の一つ
 
     /**
      * The attributes that should be hidden for arrays.

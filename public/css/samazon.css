@@ -1,3 +1,8 @@
+.user-edit-label{
+    cursor: pointer;
+    cursor: hand;
+}
+
 .samazon-sidebar-category-label {
     width:  156px;
     height: 20px;
