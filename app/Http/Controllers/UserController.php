@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User; //Userのクラスを仕様するために、useを持ってくる、パスで繋ぐことが可能
+ use App\Product;
  use Illuminate\Support\Facades\Auth;//Authのクラスを使用します！
 use Illuminate\Http\Request;
 
@@ -81,6 +82,15 @@ class UserController extends Controller
              } 
 
              return redirect()->route('mypage');
+         }
+
+         public function favorite()
+         {
+             $user = Auth::user();
+
+             $favorites = $user->favorites(Product::class)->get();
+
+             return view('users.favorite', compact('favorites'));
          }
 
 
