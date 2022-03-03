@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Auth;
+ use Gloudemans\Shoppingcart\Facades\Cart;
+ use Illuminate\Support\Facades\Auth;
   use Illuminate\Support\Facades\DB;
 
 
@@ -23,7 +23,7 @@ class CartController extends Controller
 
         $total = 0;
 
-        foreach($cart as$c) {
+        foreach($cart as $c) {
             $total += $c->qty * $c->price;
         }
         return view('carts.index', compact('cart', 'total'));
@@ -59,7 +59,7 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        $cart = BD::table('shoppingcart')->where('instance', Auth::user()->id)->where('identifier', $count)->get();
+        $cart = DB::table('shoppingcart')->where('instance', Auth::user()->id)->where('identifier', $count)->get();
 
         return view('carts.show', compact('cart'));
     }
@@ -92,7 +92,7 @@ class CartController extends Controller
      */
     public function destroy(Request $request)
     {
-        $user_shoppingcarts = BD::table('shoppingcart')->where('instance', Auth::user()->id)->get();
+        $user_shoppingcarts = DB::table('shoppingcart')->where('instance', Auth::user()->id)->get();
 
         $count = $user_shoppingcarts->count();
 
@@ -103,6 +103,6 @@ class CartController extends Controller
 
         Cart::instance(Auth::user()->id)->destroy();
 
-        return redirect()->route('carts,index');
+        return redirect()->route('carts.index');
         }
 }

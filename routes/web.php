@@ -11,9 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WebController@index') ;
+
+Route::get('users/carts', 'CartController@index')->name('carts.index');
+
+Route::post('users/carts', 'CartController@store')->name('carts.store');
+ 
+  Route::delete('users/carts', 'CartController@destroy')->name('carts.destroy');
 
 Route::get('users/mypage', 'UserController@mypage')->name('mypage');
 Route::get('users/mypage/edit', 'UserController@edit')->name('mypage.edit');
